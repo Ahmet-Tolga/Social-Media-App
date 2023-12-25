@@ -1,0 +1,228 @@
+{% load static %}
+<script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>                   
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+<script>
+    $(document).ready(function(){
+    setInterval(function(){
+       $.ajax({
+           type: 'GET',
+           url : "/getmessages/{{post_details.id}}",
+            success: function(response){
+                //console.log("everything is ok");
+                $("#Mess").empty()
+                for (var key in response.rest)
+                {
+                    //var temp="<li class='message'><p class='text'>"++"</p><span class='sender'>"+response.rest[key].user+"</span><span class='date'>"+response.rest[key].date+"</span></li>"
+                    var temp="<div class='msg left-msg'></div><div class='msg-bubble'><div class='msg-info'><div class='msg-info-name'>"+response.rest[key].user+"</div><div class='msg-info-time'>"+response.rest[key].date+"</div></div><div class='msg-text'>"+response.rest[key].message+"</div></div></div>"
+                    $("#Mess").append(temp);
+                }
+            },
+            error: function(response){
+                alert(response)
+            }
+        });
+    },1000);
+    })
+    </script>
+
+<style>
+:root {
+  --body-bg: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --msger-bg: #fff;
+  --border: 2px solid #ddd;
+  --left-msg-bg: #ececec;
+  --right-msg-bg: #579ffb;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: var(--body-bg);
+  font-family: Helvetica, sans-serif;
+}
+
+.msger {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 867px;
+  margin: 25px 10px;
+  height: calc(100% - 50px);
+  border: var(--border);
+  border-radius: 5px;
+  background: var(--msger-bg);
+  box-shadow: 0 15px 15px -5px rgba(0, 0, 0, 0.2);
+}
+
+.msger-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: var(--border);
+  background: white;
+  color: rgb(1, 1, 100);
+}
+
+.msger-chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+.msger-chat::-webkit-scrollbar {
+  width: 6px;
+}
+.msger-chat::-webkit-scrollbar-track {
+  background: #ddd;
+}
+.msger-chat::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+}
+.msg {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+.msg:last-of-type {
+  margin: 0;
+}
+.msg-img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  background: #ddd;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+}
+.msg-bubble {
+  max-width: 450px;
+  padding: 15px;
+  border-radius: 15px;
+  background: rgb(5, 5, 116);
+  color: white;
+}
+.msg-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.msg-info-name {
+  margin-right: 10px;
+  font-weight: bold;
+  color: rgb(37, 252, 37);
+}
+.msg-info-time {
+  font-size: 0.85em;
+  color: beige;
+}
+
+.left-msg .msg-bubble {
+  border-bottom-left-radius: 0;
+}
+
+.right-msg {
+  flex-direction: row-reverse;
+}
+.right-msg .msg-bubble {
+  background: var(--right-msg-bg);
+  color: #fff;
+  border-bottom-right-radius: 0;
+}
+.right-msg .msg-img {
+  margin: 0 0 0 10px;
+}
+
+.msger-inputarea {
+  display: flex;
+  padding: 10px;
+  border-top: var(--border);
+  background: #eee;
+}
+.msger-inputarea * {
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  font-size: 1em;
+}
+.msger-input {
+  flex: 1;
+  background: #ddd;
+}
+
+.msger-chat {
+  background-color: #fcfcfe;
+}
+
+</style>
+<section class="msger">
+    <header class="msger-header">
+      <div class="msger-header-title">
+        <i class="fas fa-comment-alt"></i> Sciencer Chat/   {{post_details.category}}
+      </div>
+      <div class="msger-header-options">
+        <span><i class="fas fa-cog">{{post_details.caption}}</i></span>
+      </div>
+    </header>
+  
+    <main class="msger-chat" id="Mess">
+      
+    </main>
+  
+    <form class="msger-inputarea" id="post_form">
+        {% csrf_token %}
+            <input type="hidden" name="username" value="{{user.username}}" id="username">
+            <input type="hidden" name="post_id" value="{{post_details.id}}" id="post_id">
+            <input type="text" class="form-control" aria-label="Default"  placeholder="Type your message here" aria-describedby="inputGroup-sizing-default"  id="message" name="message" style="border: 1px solid black;">
+            <button type="submit" class="btn btn-info rounded-4">
+              <i class='fa fa-send' style='color: white;font-size: 20px;'></i>
+            </button>
+    </form>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js" integrity="sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i" crossorigin="anonymous"></script>
+</div><script type="text/javascript">
+    $(document).on('submit','#post_form',function(e){
+        e.preventDefault();
+    
+        $.ajax({
+          type:'POST',
+          url:'/send/message',
+          data:{
+            username:$('#username').val(),
+            post_id:$('#post_id').val(),
+            message:$('#message').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+          },
+          success: function(data){
+            //alert(data)
+          }
+        });
+        document.getElementById('message').value = ''
+      });
+      $(document).ready(function(){
+        $("#emoji").click(function(){
+          var temp=$("#emoji").val()
+          $("#message").add(temp)
+        })
+      })
+    
+    </script>

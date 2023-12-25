@@ -1,0 +1,190 @@
+<style>
+    html {
+  height: 100%;
+}
+body {
+  margin:0;
+  padding:0;
+  font-family: sans-serif;
+  background: #fff;
+}
+
+.login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  padding: 40px;
+  transform: translate(-50%, -50%);
+  background: white;
+  box-shadow: 0 15px 25px rgba(0,0,0,.6);
+  border-radius: 10px;
+}
+
+.login-box h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  color: blue;
+  text-align: center;
+}
+
+.login-box .user-box {
+  position: relative;
+}
+
+.login-box .user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: black;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+.login-box .user-box label {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  padding: 10px 0;
+  color: black;
+  font-size: 12px;
+  pointer-events: none;
+  transition: .5s;
+}
+
+.login-box form button {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: blue;
+  font-size: 16px;
+  text-decoration: none;
+  overflow: hidden;
+  transition: .5s;
+  margin-top: 40px;
+  letter-spacing: 4px;
+  border: none;
+}
+.login-box form{
+    display: flex;justify-content: center;flex-direction: column;
+}
+
+.login-box button:hover {
+  background: blue;
+  color: #fff;
+  border-radius: 5px;}
+
+.login-box button span {
+  position: absolute;
+  display: block;
+}
+
+.login-box button span:nth-child(1) {
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, green);
+  animation: btn-anim1 1s linear infinite;
+}
+
+@keyframes btn-anim1 {
+  0% {
+    left: -100%;
+  }
+  50%,100% {
+    left: 100%;
+  }
+}
+
+.login-box button span:nth-child(2) {
+  top: -100%;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, green);
+  animation: btn-anim2 1s linear infinite;
+  animation-delay: .25s
+}
+
+@keyframes btn-anim2 {
+  0% {
+    top: -100%;
+  }
+  50%,100% {
+    top: 100%;
+  }
+}
+
+.login-box button span:nth-child(3) {
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(270deg, transparent, green);
+  animation: btn-anim3 1s linear infinite;
+  animation-delay: .5s
+}
+
+@keyframes btn-anim3 {
+  0% {
+    right: -100%;
+  }
+  50%,100% {
+    right: 100%;
+  }
+}
+
+.login-box button span:nth-child(4) {
+  bottom: -100%;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(360deg, transparent,green);
+  animation: btn-anim4 1s linear infinite;
+  animation-delay: .75s
+}
+
+@keyframes btn-anim4 {
+  0% {
+    bottom: -100%;
+  }
+  50%,100% {
+    bottom: 100%;
+  }
+}
+.login-box .lab{color: #1877F2;background-color: white;margin-top: 5px;}
+.login-box .sign_up{text-decoration: none;color: #1877F2;}
+.login-box .sign_up:hover{text-decoration: underline;background-color: white;color: #1877F2;}
+</style>
+<div class="login-box">
+    <h2>Welcome to<br> sciencer</h2>
+    <div>
+      <style>h5{color: red;padding-bottom: 5px;}</style>
+      {% for message in messages %}
+      <h5>{{message}}</h5>
+      {% endfor %}
+    </div>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="user-box">
+        <input type="text" name="username" required="" style="border-bottom: 1px solid black;">
+        <label>Username</label>
+      </div>
+      <div class="user-box">
+        <input type="password" name="password" required="" style="border-bottom: 1px solid black;">
+        <label>Password</label>
+      </div>
+      <button type="submit">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        Log in
+      </button>
+    </form>
+    <label class="lab">Don't have a account?</label>
+    <a href="{% url 'signup' %}" class="sign_up">Sign up</a>
+  </div>
